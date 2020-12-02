@@ -8,7 +8,7 @@ def lecture(nom_fichier):
 	return liste
 
 
-def règles_1(borne_min, borne_max, lettre, password): 						 
+def regles_1(borne_min, borne_max, lettre, password): 						 
 	valide = False
 	compteur = 0
 	for i in password :
@@ -19,40 +19,40 @@ def règles_1(borne_min, borne_max, lettre, password):
 	return valide
 
 
-def règles_2(position_1, position_2, lettre, password):
+def regles_2(position_1, position_2, lettre, password):
 	valide = False
 	if lettre == password[position_1-1] and lettre != password[position_2-1] or lettre == password[position_2-1] and lettre != password[position_1-1]:
 		valide = True
 	return valide
 
-def découpage(chaine):
-	chaine_découpé = re.split(r'[-:\s]\s*', chaine)
-	borne_min = int(chaine_découpé[0])
-	borne_max = int(chaine_découpé[1])
-	lettre = chaine_découpé[2]
-	password = chaine_découpé[3]
+def decoupage(chaine):
+	chaine_decoupe = re.split('[-: ]+', chaine)
+	borne_min = int(chaine_decoupe[0])
+	borne_max = int(chaine_decoupe[1])
+	lettre = chaine_decoupe[2]
+	password = chaine_decoupe[3]
 	return(borne_min, borne_max, lettre, password)
 	
 	
-def compteur_password(liste, nb_règle):
+def compteur_password(liste, nb_regle):
 	compteur = 0
 	for i in range(0,len(liste)):
-		borne_min, borne_max, lettre, password = découpage(liste[i])
-		if nb_règle == 1:
-			résultat = règles_1(borne_min, borne_max, lettre, password)
+		borne_min, borne_max, lettre, password = decoupage(liste[i])
+		if nb_regle == 1:
+			resultat = regles_1(borne_min, borne_max, lettre, password)
 		else:
-			résultat = règles_2(borne_min, borne_max, lettre, password)
-		if résultat == True:
+			resultat = regles_2(borne_min, borne_max, lettre, password)
+		if resultat == True:
 			compteur = compteur + 1
 	return compteur
 
 liste = lecture("Valeurs.txt")
 
-résultat_1 = compteur_password(liste, 1)
-print(résultat_1)
+resultat_1 = compteur_password(liste, 1)
+print(resultat_1)
 
-résultat_2 = compteur_password(liste, 2)
-print(résultat_2)
+resultat_2 = compteur_password(liste, 2)
+print(resultat_2)
 
 
 
