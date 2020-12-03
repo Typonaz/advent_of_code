@@ -1,61 +1,50 @@
 import re
 
 def lecture(nom_fichier):
-	liste = []
-	with open(nom_fichier, "r") as fichier:
-		for ligne in fichier:
-			liste.append(ligne)
-	return liste
+	file = open(nom_fichier)
+	lines = file.read().splitlines()
+	file.close()
+	return lines
 
 
 def regles_1(borne_min, borne_max, lettre, password): 						 
-	valide = False
 	compteur = 0
-	for i in password :
-		if i == lettre:
+	for char in password:
+		if char == lettre:
 			compteur = compteur + 1
-	if compteur >= borne_min and compteur <= borne_max :
-		valide = True
-	return valide
-
+	return compteur >= borne_min and compteur <= borne_max
+		
 
 def regles_2(position_1, position_2, lettre, password):
-	valide = False
-	if lettre == password[position_1-1] and lettre != password[position_2-1] or lettre == password[position_2-1] and lettre != password[position_1-1]:
-		valide = True
-	return valide
+	return (lettre == password[position_1-1]) != (lettre == password[position_2-1])
+	
+
+def regles(position_1, position_2, lettre, password, num_regle):
+	if num_regle == 1:
+		return regles_1(position_1, position_2, lettre, password)
+	else:
+		return regles_2(position_1, position_2, lettre, password)
+		  
 
 def decoupage(chaine):
-	chaine_decoupe = re.split('[-: ]+', chaine)
-	borne_min = int(chaine_decoupe[0])
-	borne_max = int(chaine_decoupe[1])
-	lettre = chaine_decoupe[2]
-	password = chaine_decoupe[3]
-	return(borne_min, borne_max, lettre, password)
+	chaine_decoupee = re.split('[-: ]+', chaine)
+	borne_min = int(chaine_decoupee[0])
+	borne_max = int(chaine_decoupee[1])
+	lettre = chaine_decoupee[2]
+	password = chaine_decoupee[3]
+	return (borne_min, borne_max, lettre, password)
 	
 	
-def compteur_password(liste, nb_regle):
+def compteur_password(liste, num_regle):
 	compteur = 0
-	for i in range(0,len(liste)):
-		borne_min, borne_max, lettre, password = decoupage(liste[i])
-		if nb_regle == 1:
-			resultat = regles_1(borne_min, borne_max, lettre, password)
-		else:
-			resultat = regles_2(borne_min, borne_max, lettre, password)
-		if resultat == True:
-			compteur = compteur + 1
+	for ligne in liste:
+		borne_min, borne_max, lettre, password = decoupage(ligne)
+		if regles(borne_min, borne_max, lettre, password, num_regle):
+			compteur += 1
 	return compteur
 
 liste = lecture("Valeurs.txt")
 
-resultat_1 = compteur_password(liste, 1)
-print(resultat_1)
+print("résultat puzzle 1:", compteur_password(liste, 1))
 
-resultat_2 = compteur_password(liste, 2)
-print(resultat_2)
-
-
-
-
-
-
+print("résultat puzzle 2:", compteur_password(liste, 2))
