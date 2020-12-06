@@ -74,8 +74,3 @@ max_seat_ID = upper_seat_ID(calc_seat_IDs(boarding_passes))
 min_seat_ID = lower_seat_ID(calc_seat_IDs(boarding_passes))
 
 print("Puzzle 2 =", missing_seat_ID(max_seat_ID, min_seat_ID, calc_seat_IDs(boarding_passes)))
-
-
-
-
-
